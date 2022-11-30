@@ -120,9 +120,8 @@ router.post('/posts/:id/edit', async function (req, res) {
 });
 
 router.post('/posts/:id/delete', async function (req, res) {
-  const postId = new ObjectId(req.params.id);
-  await db.getDb().collection('posts').deleteOne({ _id: postId });
-
+  const post = new Post(null,null,req.params.id);
+  await post.delete();
   res.redirect('/admin');
 });
 
