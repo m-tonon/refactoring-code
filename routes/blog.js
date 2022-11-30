@@ -94,8 +94,7 @@ router.get('/posts/:id/edit', async function (req, res) {
 router.post('/posts/:id/edit', async function (req, res) {
   const enteredTitle = req.body.title;
   const enteredContent = req.body.content;
-  const postId = new ObjectId(req.params.id);
-
+  
   if (
     !enteredTitle ||
     !enteredContent ||
@@ -112,14 +111,10 @@ router.post('/posts/:id/edit', async function (req, res) {
     res.redirect(`/posts/${req.params.id}/edit`);
     return; 
   }
-
-  await db
-    .getDb()
-    .collection('posts')
-    .updateOne(
-      { _id: postId },
-      { $set: { title: enteredTitle, content: enteredContent } }
-    );
+  
+    // create a new post based on the model
+  const post = new Post(enteredTitle, enteredContent, req.params.id);
+  await post.save(); // stores the post on db
 
   res.redirect('/admin');
 });
