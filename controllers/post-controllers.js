@@ -13,7 +13,7 @@ async function getAdm (req, res) {
 
   let sessionInputData = req.session.inputData;
 
-  if (!sessionInputData) {
+  if (!sessionInputData) { 
     sessionInputData = {
       hasError: false,
       title: '',
