@@ -4,7 +4,7 @@ const db = require('../data/database');
 
 const ObjectId = mongodb.ObjectId;
 
-class Post {
+class Post { // class can be used to group multiple functionalities together
   constructor(title, content, id) { 
     // special method which contains code that will be executed when called
     // - an concreate object
@@ -16,10 +16,27 @@ class Post {
     }
   }
 
-  async save() {
-    let result;
+// STATIC METHOD - isnt called on the object, but on the class itself
+  static async fetchAll(){ // for all posts
+    const posts = await db.getDb().collection('posts').find().toArray();
+    return posts;
+  };
 
-    if (this.id) { // if have id, then update the post
+  async fetch() { // for single post
+    if (!this.id) {
+      return
+    }
+    // to populate the blueprint from Post class 
+    const postDocument = await db.getDb().collection('posts').findOne({ _id: this.id });
+    this.title = postDocument.title;
+    this.content = postDocument.content;
+
+  }
+
+  async save() {
+    let result; // this is needed for use on if/else statement
+
+    if (this.id) { // if have id, then UPDATE the post
       result = await db
         .getDb()
         .collection('posts')
@@ -27,7 +44,7 @@ class Post {
           { _id: this.id },
           { $set: { title: this.title, content: this.content } }
         );
-    } else { // if dont have an id, then create the post
+    } else { // if dont have an id, then CREATE the post
       result = await db.getDb().collection('posts').insertOne({
         title: this.title,
         content: this.content,
@@ -37,7 +54,7 @@ class Post {
     return result;
     }
 
-    async delete() {
+    async delete() { // for DELETE the post
       if (!this.id){ // if dont have an id
         return;
       }
