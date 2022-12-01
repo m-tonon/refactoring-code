@@ -1,10 +1,10 @@
-function getSessionErrorData(req,defaultValues) {
+function getSessionErrorData(req, defaultValues) {
   let sessionInputData = req.session.inputData;
   
     if (!sessionInputData) { 
       sessionInputData = {
         hasError: false,
-        ...defaultValues // operator to spread that object into this new objetc
+        ...defaultValues //spread that in this object
       };
     }
   
@@ -13,7 +13,7 @@ function getSessionErrorData(req,defaultValues) {
     return sessionInputData;
 }
 
-function flashErrorToSession(req, data, action){
+function flashErrorsToSession(req, data, action){
   req.session.inputData = {
     hasError: true,
     ...data
@@ -24,5 +24,5 @@ function flashErrorToSession(req, data, action){
 
 module.exports = {
   getSessionErrorData: getSessionErrorData,
-  flashErrorToSession: flashErrorToSession
+  flashErrorsToSession: flashErrorsToSession
 };

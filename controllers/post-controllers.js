@@ -1,10 +1,9 @@
 const Post = require('../models/post');
 const validationSession = require('../util/validation-session');
 const validation = require('../util/validation');
-const { post } = require('../routes/blog');
 
 function getHome(req, res) {
-  res.render('welcome', { csrfToken: req.csrfToken() });
+  res.render('welcome');
 }
 
 async function getAdm (req, res) {
@@ -16,13 +15,12 @@ async function getAdm (req, res) {
 
   sessionErrorData = validationSession.getSessionErrorData(req, {
     title: '',
-    content: ''
-  }); // the second parameter will pre populate the forms on update post
+    content: '',
+  });
 
   res.render('admin', {
     posts: posts,
     inputData: sessionErrorData,
-    csrfToken: req.csrfToken(),
   });
 }
 
@@ -30,10 +28,8 @@ async function createPost (req, res) {
   const enteredTitle = req.body.title;
   const enteredContent = req.body.content;
 
-  if (
-    !validation.postIsValid(enteredTitle,enteredContent)
-  ) {
-    validationSession.flashErrorToSession(
+  if (!validation.postIsValid(enteredTitle,enteredContent)) {
+    validationSession.flashErrorsToSession(
       req, 
       {
         message: 'Invalid input - please check your data.',
@@ -69,7 +65,6 @@ async function getSinglePost (req, res) {
   res.render('single-post', {
     post: post,
     inputData: sessionErrorData,
-    csrfToken: req.csrfToken(),
   });
 }
 
@@ -80,7 +75,7 @@ async function updatePost (req, res) {
   if (
     !validation.postIsValid(enteredTitle,enteredContent)
   ) {
-    validationSession.flashErrorToSession(
+    validationSession.flashErrorsToSession(
       req, 
       {
         message: 'Invalid input - please check your data.',

@@ -1,12 +1,12 @@
-function postIsValid (title, content) {
+function postIsValid(title, content) {
   return (
-    enteredTitle &&
-    enteredContent &&
-    enteredTitle.trim() === '' &&
-    enteredContent.trim() === ''
+    title &&
+    content &&
+    title.trim() !== '' &&
+    content.trim() !== ''
   );
 }
 
 module.exports = {
   postIsValid: postIsValid
-}
+};
