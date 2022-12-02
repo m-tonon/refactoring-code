@@ -49,8 +49,14 @@ async function createPost (req, res) {
   res.redirect('/admin');
 }
 
-async function getSinglePost (req, res) {
-  const post = new Post(null,null,req.params.id);
+async function getSinglePost (req, res, next) {
+  let post;
+  try { // this force the code to reach the express error default handling middleware
+    post = new Post(null,null,req.params.id); 
+  } catch(error){
+    // next(error);
+    return res.render('404');
+  }
   await post.fetch(); // trig the fetch method on Post class
 
   if (!post.title || !post.content) {
