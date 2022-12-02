@@ -7,10 +7,6 @@ function getHome(req, res) {
 }
 
 async function getAdm (req, res) {
-  if (!res.locals.isAuth) {
-    return res.status(401).render('401');
-  }
-
   const posts = await Post.fetchAll(); // this fetch all posts with the static method
 
   sessionErrorData = validationSession.getSessionErrorData(req, {
